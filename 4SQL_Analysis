@@ -1,0 +1,72 @@
+-----Nonsmanonline SQL Analysis
+
+--KPI'S
+select *
+from Nonsman
+
+
+--Total Products
+select count(Product_Name) as 'Total Products'
+from Nonsman
+
+--Avaliable Products
+select a.[Stock Quantity]
+from(select Stock_Qty, count(Stock_Qty) as 'Stock Quantity'
+from Nonsman
+where Stock_Qty <> 'Unavailable'
+group by Stock_Qty) as a
+
+--Unavaliable Products
+select a.[Stock Quantity]
+from(Select Stock_Qty, count(Stock_Qty) as 'Stock Quantity'
+from Nonsman
+where Stock_Qty <> 'Available'
+group by Stock_Qty) as a 
+
+--Average Price
+select cast(avg(price) as decimal(10,2)) as 'Average Price'
+from Nonsman
+
+--Highest Price
+select cast(max(Price) as decimal(10,2)) as 'Highest Price'
+from Nonsman
+
+--Lowest Price
+select cast(Min(Price) as decimal(10,2)) as 'Lowest Price'
+from Nonsman
+
+--Charts
+
+--Top 10 most Expensivce Products
+select top 10 Product_Name, sum(price) as Price
+from Nonsman
+group by Product_Name
+order by 2 desc
+
+--Top 10 cheapest Products
+select Top 10 Product_Name, Price
+from Nonsman
+order by 2 asc
+
+
+--Price Distribution
+select 
+Case 
+	when Price <= 99999 then '0 - 99999'
+	when price between 100000 and 199999 then '100000 - 199999'
+	when price between 200000 and 299999 then '200000 - 299999'
+	When price between 300000 and 399999 then '300000 - 399999'
+	when price between 400000 and 499999 then '400000 - 499999'
+	when price between 500000 and 599999 then '500000 - 599999'
+	else '700000 - 799999'
+	End as 'Price Distribution', Count(Price) as Products
+from Nonsman
+group by Case 
+	when Price <= 99999 then '0 - 99999'
+	when price between 100000 and 199999 then '100000 - 199999'
+	when price between 200000 and 299999 then '200000 - 299999'
+	When price between 300000 and 399999 then '300000 - 399999'
+	when price between 400000 and 499999 then '400000 - 499999'
+	when price between 500000 and 599999 then '500000 - 599999'
+	else '700000 - 799999'
+	End
